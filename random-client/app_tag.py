@@ -27,6 +27,7 @@ def generate_random_time_date():
     random_date      = today + datetime.timedelta(seconds=random.randrange(get_seconds_in_week()))
     return random_date.strftime("%Y-%m-%d %H:%M")
 
+
 def generate_random_meal():
     names        = ['shabbat meal!', 'the guys', 'friday night with the girls', 'girls meal!', 'friday with the mantinbands', '']
     descriptions = ['just our regular kind of meal', 'time to feast!', 'food like never before', 'some good vegan food']
@@ -41,8 +42,8 @@ def generate_random_meal():
               'total_guests'         : r(20),
               'current_guests'       : 0,
               'time'                 : generate_random_time_date(),
-              'lat'                  : round(random.uniform(-90,90), 10),
-              'lng'                  : round(random.uniform(-180,180), 11),
+              'lat'                  : round(random.uniform(-90,90), 8),
+              'lng'                  : round(random.uniform(-180,180), 8),
               'kosher'               : kosher[r(kosher.__len__()-1)],
               'restrictions'         : restrictions[r(restrictions.__len__()-1)],
               'allergies'            : allergies[r(allergies.__len__()-1)],
@@ -52,9 +53,31 @@ def generate_random_meal():
               'background_image_url' : 'https://google.com'  }
 
 
+def generate_random_community():
+    descriptions = ['The boys', 'The girls', 'Mantinbands', 'Efrat members', 'THE VEGANS']
+
+    return {  'admin'                : r(100),
+              'description'          : descriptions[r(descriptions.__len__()-1)],
+              'background_image_url' : 'https://google.com',
+              'lat'                  : round(random.uniform(-90,90), 8),
+              'lng'                  : round(random.uniform(-180,180), 8),
+              'radius'               : r(5000) }
 
 
-#print(generate_random_meal())
-#r = requests.post("https:/foo.com/api/family/add", data=generate_random_family());
-r = requests.post("https:/foo.com/api/meals/add", data=generate_random_meal());
-print(r.text)
+def generate_random_meal_request():
+    messages = ['hey its us! let us join?', 'we are coming without the dogs, dont worry', '', 'all the kids are here at last!', 'cant wait for this meals its gonna be great!', 'finally we are both here!', 'missed you guys!', 'we are visiting israel for the next two weeks and would love to join you guys', 'we are x friendly travelers.. can we join?']
+
+    return {  'meal_id'              : 0,
+              'family_id'            : r(100),
+              'target_family_id'     : r(100),
+              'message'              : messages[r(messages.__len__()-1)],
+              'status'               : 'not-answered' }
+
+
+#print(generate_random_meal_request())
+#requests.post("https:/foo.com/api/meal/request/add", data=generate_random_meal_request())
+for i in range(0,105):
+    print(requests.post("https:/foo.com/api/meal/request/add", data=generate_random_meal_request()).text)
+#    requests.post("https:/foo.com/api/community/add", data=generate_random_community())
+#    requests.post("https:/foo.com/api/family/add", data=generate_random_family())
+#    requests.post("https:/foo.com/api/meal/add", data=generate_random_meal())
